@@ -1,17 +1,96 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header [translucent]="true">
+      <ion-toolbar>
+        <ion-title>
+          Gerenciar fotos
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content [fullscreen]="true">
+    
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">Gerenciar fotos</ion-title>
+        </ion-toolbar>
+      </ion-header>  
+      
+      <ion-toolbar>
+        <ion-buttons slot="primary">
+          <ion-button (click)="clickedSearch()">
+            <ion-icon slot="icon-only" name="search"></ion-icon>
+          </ion-button>
+          <ion-button (click)="clickedBarcode()">
+            <ion-icon slot="icon-only" name="barcode"></ion-icon>
+          </ion-button>
+        </ion-buttons>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
-</ion-content>
+
+        <ion-searchbar placeholder="Código do produto" (ionChange)="onSearchChange($event)" [(ngModel)]="codiprod"></ion-searchbar>
+      </ion-toolbar>
+      <!-- <div *ngIf="prod.flag">
+  
+      </div> -->
+     
+      <div *ngIf="prod.flag; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+      </ng-template>
+      <ng-template #elseBlock>
+        <div *ngIf="codiprod">
+          <ion-chip outline  color="danger">
+            <ion-label>não encontrado</ion-label>
+          </ion-chip>
+        </div>
+      </ng-template>
+      <div *ngIf="prod.flag">
+        <ion-card>
+          <ion-badge color="outline">{{prod.desc}}</ion-badge>
+          <ion-badge color="outline">{{prod.codifab}}</ion-badge>
+          <ion-badge color="outline">{{prod.qtd}} UN</ion-badge>
+          <ion-item>
+            <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
+            <ion-label>Imagem de capa</ion-label>
+            <ion-button (click)="selectfile('capa')">
+              <ion-icon name="images"></ion-icon>
+            </ion-button>
+            <span id="input-capa" style="display:none">
+              <input type="file" accept="image/*" onchange="document.getElementById('img-capa').src = window.URL.createObjectURL(this.files[0])">><input>
+            </span>
+          </ion-item>
+          <ion-card-content>
+          <img id="img-capa" src="http://192.168.15.12/instaparts/img.php?CODIPROD={{codiprod}}&IMG=CAPA_IMG" alt="">
+          </ion-card-content>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
+            <ion-label>Imagem 1</ion-label>
+            <ion-button (click)="selectfile('img1')">
+              <ion-icon name="images"></ion-icon>
+            </ion-button>
+            <span id="input-img1" style="display:none">
+              <input type="file" accept="image/*" onchange="document.getElementById('img-img1').src = window.URL.createObjectURL(this.files[0])">><input>
+            </span>               
+          </ion-item>
+          <ion-card-content>
+          <img id="img-img1" src="http://192.168.15.12/instaparts/img.php?CODIPROD={{codiprod}}&IMG=IMG2_IMG" alt="">
+          </ion-card-content>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
+            <ion-label>Imagem 2</ion-label>
+            <ion-button (click)="selectfile('img2')">
+              <ion-icon name="images"></ion-icon>
+            </ion-button>
+            <span id="input-img2" style="display:none">
+              <input type="file" accept="image/*" onchange="document.getElementById('img-img2').src = window.URL.createObjectURL(this.files[0])">><input>
+            </span>
+          </ion-item>
+          <ion-card-content>
+          <img id="img-img2" src="http://192.168.15.12/instaparts/img.php?CODIPROD={{codiprod}}&IMG=IMG3_IMG" alt="">
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-content>
+    
