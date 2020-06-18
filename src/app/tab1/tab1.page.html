@@ -14,6 +14,8 @@
     </ion-toolbar>
   </ion-header>
 
+
+
   <ion-toolbar>
     <ion-buttons slot="primary">
       <ion-button (click)="clickedSearch()">
@@ -24,9 +26,15 @@
       </ion-button>
     </ion-buttons>
 
+    <!-- <ion-searchbar #inputSearch id="input-prod" type="text" debounce="500" (ionInput)="getItems($event)" placeholder="Digite o código" cancelButtonText="X" [(ngModel)]="codsearch"></ion-searchbar> -->
 
-    <ion-searchbar placeholder="Código do produto" (ionChange)="onSearchChange($event)" [(ngModel)]="codiprod">
+    <ion-searchbar #inputSearch debounce="500" (ionInput)="getItems($event)" cancelButtonText="X" placeholder="Código do produto" (ionChange)="onSearchChange($event)" [(ngModel)]="codiprod">
     </ion-searchbar>
+    <ion-list *ngIf="isItemAvailable">
+      <ion-item *ngFor="let item of items" >
+        <b>[<span  (click)="setProd($event)" style="color: rebeccapurple">{{item}}</span>]</b>
+      </ion-item>
+    </ion-list> 
   </ion-toolbar>
   <!-- <div *ngIf="prod.flag">
   
@@ -73,7 +81,7 @@
       <ion-card>
         <ion-item>
           <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
-          <ion-label>#Imagem 1</ion-label>
+          <ion-label>#Imagem 2</ion-label>
           <ion-button (click)="selectfile('img2')">
             <ion-icon name="camera"></ion-icon>
           </ion-button>
@@ -88,7 +96,7 @@
       <ion-card>
         <ion-item>
           <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
-          <ion-label>#Imagem 2</ion-label>
+          <ion-label>#Imagem 3</ion-label>
           <ion-button (click)="selectfile('img3')">
             <ion-icon name="camera"></ion-icon>
           </ion-button>
@@ -101,5 +109,10 @@
         </ion-card-content>
       </ion-card>
     </form>
+    <small>{{result.capa}}</small>
+    <br>
+    <small>{{result.img2}}</small>
+    <br>
+    <small>{{result.img3}}</small>
   </div>
 </ion-content>
