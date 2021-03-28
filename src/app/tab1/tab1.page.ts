@@ -14,14 +14,31 @@ export class Tab1Page {
 
   public codiprod:any;
   public prod:any = {"codi":"","desc":"", "codifab":"","qtd":"", "flag":false};
-  public image:any = {"flag":false};
+  public image:any = {"flag":false, "input-capa": false, "input-img2":false, "input-img3":false};
   public result:any = {"capa":"","img2":"","img3":""};
   public origin:any = origin;
+  public window:any = window;
+  public url:any = '';
+  /*   D   E   B   U   G   */
+  public debug:any = false;
+  /* - - - - - - - - - - - */
   constructor() {
-    // this.codiprod = '010278';
+    this.initDebug();
     this.clickedSearch();
     this.initializeItems();
     this.isItemAvailable = false; // initialize the items with false
+  }
+  initDebug(){
+    if(this.origin = 'http://localhost:8100'){
+      this.debug = true;
+    }
+    if(this.debug){
+     this.codiprod = '010278';
+     this.url = 'http://73140629c078.sn.mynetname.net/';
+    }else{
+      this.url = this.origin;
+    }
+    window.localStorage.setItem('url', this.url);
   }
   clickedBarcode(){
     alert('');
@@ -34,36 +51,43 @@ export class Tab1Page {
   }
   onChangeImage( selector1, selector2){
     this.image.flag = true;
+    this.image[selector1] = true;
     $('#'+selector2)[0].src = window.URL.createObjectURL($('#'+selector1+' input')[0].files[0]);
     console.log(window.URL.createObjectURL($('#'+selector1+' input')[0].files[0]));
   }
   onSubmit(){
     if(!confirm("Confirma a alteração das fotos?")) return;
-    if($('#input-capa input')[0].files[0]){
+    if($('#input-capa input')[0].files[0] && this.image['input-capa']){
       this.submitCapa();
-    }else if($('#input-img2 input')[0].files[0]){
+    }
+    if($('#input-img2 input')[0].files[0] && this.image['input-img2']){
       this.submitImg2();
-    }else if($('#input-img3 input')[0].files[0]){
+    }
+    if($('#input-img3 input')[0].files[0] && this.image['input-img3']){
       this.submitImg3();
 
     }
+    this.image['input-capa'] = false;
+    this.image['input-img2'] = false;
+    this.image['input-img3'] = false;
+    this.image['flag'] = false;
   }
   submitCapa(){
     if($('#input-capa input')[0].files[0]){
       var form;
+      console.log('submitCapa');
       form = new FormData();
       form.append('CAPA_IMG', $('#input-capa input')[0].files[0]);
       this.result.capa = this.codiprod+" > CAPA_IMG : ERRO";
       $.ajax({
         type: "POST",
-        url: this.origin+'/instaparts/upload.php?IMG=CAPA_IMG&CODIGO='+btoa(this.codiprod),
+        url: this.url+'/instaparts/upload.php?IMG=CAPA_IMG&CODIGO='+btoa(this.codiprod),
         data: form,
         processData: false,
         contentType: false,
         success: (data)=>{
           console.log(data)
           this.result.capa = JSON.parse(data);
-          this.submitImg2();
         }
       });
     }
@@ -71,20 +95,20 @@ export class Tab1Page {
   submitImg2(){
     if($('#input-img2 input')[0].files[0]){
       var form;
+      console.log('submitImg2');
       form = new FormData();
       form.append('IMG2_IMG', $('#input-img2 input')[0].files[0]);
       this.result.img2 = this.codiprod+" > IMG2_IMG : ERRO";
       setTimeout(() => {
         $.ajax({
           type: "POST",
-          url: this.origin+'/instaparts/upload.php?IMG=IMG2_IMG&CODIGO='+btoa(this.codiprod),
+          url: this.url+'/instaparts/upload.php?IMG=IMG2_IMG&CODIGO='+btoa(this.codiprod),
           data: form,
           processData: false,
           contentType: false,
           success: (data)=>{
             console.log(data)
             this.result.img2 = JSON.parse(data);
-            this.submitImg3();
           }
         });        
       }, 1000);
@@ -93,13 +117,14 @@ export class Tab1Page {
   submitImg3(){
     if($('#input-img3 input')[0].files[0]){
       var form;
+      console.log('submitImg3');
       form = new FormData();
       form.append('IMG3_IMG', $('#input-img3 input')[0].files[0]);
       this.result.img3 = this.codiprod+" > IMG3_IMG : ERRO";
       setTimeout(() => {
         $.ajax({
           type: "POST",
-          url: this.origin+'/instaparts/upload.php?IMG=IMG3_IMG&CODIGO='+btoa(this.codiprod),
+          url: this.url+'/instaparts/upload.php?IMG=IMG3_IMG&CODIGO='+btoa(this.codiprod),
           data: form,
           processData: false,
           contentType: false,
@@ -113,26 +138,30 @@ export class Tab1Page {
   }
   clickedSearch(){
     this.isItemAvailable = false;
-    $.get( this.origin+"/instaparts/oci.php?CODIPROD="+this.codiprod, ( data )=>{
+    $.get( this.url+"/instaparts/oci.php?CODIPROD="+this.codiprod, ( data )=>{
       data = JSON.parse(data);
       if(!(data.data[0])){
         this.prod.flag = false;
         return;
       }
       data = data.data[0];
-      console.log(data);
       this.prod.codi = data['CODI_PROD'];
       this.prod.desc = data['DESC_PROD'];
       this.prod.codifab = data['CODIFAB_PROD'];
       this.prod.qtd = data['QTDD_QTDD'];
       this.prod.flag = true;
+      this.image['input-capa'] = false;
+      this.image['input-img2'] = false;
+      this.image['input-img3'] = false;
+      this.image['flag'] = false;
+
     });
 
   }
 
   setProd(ev:any){
     console.log("setProd");
-    console.log(ev);
+    //console.log(ev);
     // this.codsearch = ev.toElement.innerHTML;
     // this.setStep("identificacao","success");
     this.isItemAvailable = false;
@@ -165,15 +194,13 @@ export class Tab1Page {
   }
 
   initializeItems(){ 
-    // $.get( this.origin+"/instaparts/oci.php?CODIPROD="+this.codiprod, ( data )=>{
+    // $.get( this.url+"/instaparts/oci.php?CODIPROD="+this.codiprod, ( data )=>{
 
    if(this.itemsArray){
     this.items = this.itemsArray;
    }else{
-      $.get(this.origin+"/api/balanco/produto?OP=LIST", ( data )=>{
-        console.log('antes',data);
+      $.get(this.url+"/api/balanco/produto?OP=LIST", ( data )=>{
         data = JSON.parse(data);
-        console.log(data);
         this.itemsArray = data;
         this.items = data;
       });

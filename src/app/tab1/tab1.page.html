@@ -21,9 +21,9 @@
       <ion-button (click)="clickedSearch()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
-      <ion-button (click)="clickedBarcode()">
+      <!-- <ion-button (click)="clickedBarcode()">
         <ion-icon slot="icon-only" name="barcode"></ion-icon>
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
 
     <!-- <ion-searchbar #inputSearch id="input-prod" type="text" debounce="500" (ionInput)="getItems($event)" placeholder="Digite o código" cancelButtonText="X" [(ngModel)]="codsearch"></ion-searchbar> -->
@@ -74,10 +74,12 @@
             <input type="file" accept="image/*" (change)="onChangeImage('input-capa', 'img-capa')"><input>
           </span>
         </ion-item>
+
         <ion-card-content>
-          <img id="img-capa" src="{{origin}}/instaparts/img.php?CODIPROD={{codiprod}}&IMG=CAPA_IMG" alt="">
+          <img id="img-capa" src="{{url}}/instaparts/img.php?CODIPROD={{codiprod}}&IMG=CAPA_IMG" alt="">
         </ion-card-content>
       </ion-card>
+
       <ion-card>
         <ion-item>
           <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
@@ -90,7 +92,7 @@
           </span>
         </ion-item>
         <ion-card-content>
-          <img id="img-img2" src="{{origin}}/instaparts/img.php?CODIPROD={{codiprod}}&IMG=IMG2_IMG" alt="">
+          <img id="img-img2" src="{{url}}/instaparts/img.php?CODIPROD={{codiprod}}&IMG=IMG2_IMG" alt="">
         </ion-card-content>
       </ion-card>
       <ion-card>
@@ -105,7 +107,7 @@
           </span>
         </ion-item>
         <ion-card-content>
-          <img id="img-img3" src="{{origin}}/instaparts/img.php?CODIPROD={{codiprod}}&IMG=IMG3_IMG" alt="">
+          <img id="img-img3" src="{{url}}/instaparts/img.php?CODIPROD={{codiprod}}&IMG=IMG3_IMG" alt="">
         </ion-card-content>
       </ion-card>
     </form>

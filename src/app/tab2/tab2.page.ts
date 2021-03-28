@@ -11,7 +11,7 @@ export class Tab2Page {
   public origin:any = origin;
 
   constructor() {
-    $.get( this.origin+"/instaparts/filedb.php", ( data )=>{
+    $.get( window.localStorage.getItem('url')+"/instaparts/filedb.php", ( data )=>{
       data = JSON.parse(data);
       this.items = data;
       console.log(data);

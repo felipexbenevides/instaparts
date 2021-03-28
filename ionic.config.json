@@ -1,7 +1,8 @@
 {
   "name": "instaparts",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
