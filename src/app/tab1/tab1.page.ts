@@ -14,7 +14,7 @@ export class Tab1Page {
 
   public codiprod:any;
   public prod:any = {"codi":"","desc":"", "codifab":"","qtd":"", "flag":false};
-  public image:any = {"flag":false, "input-capa": false, "input-img2":false, "input-img3":false};
+  public image:any = {"flag":false, "input-capa": false, "input-img2":false, "input-img3":false, "count": 0, "success": 0};
   public result:any = {"capa":"","img2":"","img3":""};
   public origin:any = origin;
   public window:any = window;
@@ -29,8 +29,9 @@ export class Tab1Page {
     this.isItemAvailable = false; // initialize the items with false
   }
   initDebug(){
-    if(this.origin = 'http://localhost:8100'){
+    if(this.origin == 'http://localhost:8100'){
       this.debug = true;
+      console.log('Debug set');
     }
     if(this.debug){
      this.codiprod = '010278';
@@ -39,6 +40,9 @@ export class Tab1Page {
       this.url = this.origin;
     }
     window.localStorage.setItem('url', this.url);
+  }
+  initFlags(){
+    this.image = {"flag":false, "input-capa": false, "input-img2":false, "input-img3":false, "count": 0, "success": 0};
   }
   clickedBarcode(){
     alert('');
@@ -50,6 +54,7 @@ export class Tab1Page {
     $("#input-"+ident+" input").trigger('click');
   }
   onChangeImage( selector1, selector2){
+    this.image.count+=1;
     this.image.flag = true;
     this.image[selector1] = true;
     $('#'+selector2)[0].src = window.URL.createObjectURL($('#'+selector1+' input')[0].files[0]);
@@ -67,10 +72,7 @@ export class Tab1Page {
       this.submitImg3();
 
     }
-    this.image['input-capa'] = false;
-    this.image['input-img2'] = false;
-    this.image['input-img3'] = false;
-    this.image['flag'] = false;
+    this.image.flag = false;
   }
   submitCapa(){
     if($('#input-capa input')[0].files[0]){
@@ -88,6 +90,7 @@ export class Tab1Page {
         success: (data)=>{
           console.log(data)
           this.result.capa = JSON.parse(data);
+          this.image.success += 1;
         }
       });
     }
@@ -109,6 +112,8 @@ export class Tab1Page {
           success: (data)=>{
             console.log(data)
             this.result.img2 = JSON.parse(data);
+            this.image.success += 1;
+
           }
         });        
       }, 1000);
@@ -131,6 +136,7 @@ export class Tab1Page {
           success: (data)=>{
             console.log(data)
             this.result.img3 = JSON.parse(data);
+            this.image.success += 1;
           }
         });
       }, 2000);
@@ -150,10 +156,7 @@ export class Tab1Page {
       this.prod.codifab = data['CODIFAB_PROD'];
       this.prod.qtd = data['QTDD_QTDD'];
       this.prod.flag = true;
-      this.image['input-capa'] = false;
-      this.image['input-img2'] = false;
-      this.image['input-img3'] = false;
-      this.image['flag'] = false;
+      this.initFlags();
 
     });
 
